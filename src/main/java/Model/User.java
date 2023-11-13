@@ -10,28 +10,28 @@ import camp.nextstep.edu.missionutils.Console;
 
 public class User {
 
-	public Map<Menu, Integer> orderMenu() {
-		Map<Menu, Integer> menu = new HashMap<>();
+	public List<OrderItem> orderMenu() {
+		List<OrderItem> orderItems = new ArrayList<>();
 		try {
 			String input = InputView.inputMenuNumber();
 
-			List<Menu> tempMenu = processUserInput(input);
+			processUserInput(input, orderItems);
+			
 
-			menu.putAll(convertToMenuMap(tempMenu));
 		} catch (IllegalArgumentException e) {
 			System.out.println(e.getMessage());
 
 			return orderMenu();
 		}
-		return menu;
+		return orderItems;
 
 	}
 
-	private List<Menu> processUserInput(String input) {
-		String[] orderItems = input.split(",");
+	private void processUserInput(String input, List<OrderItem> orderItems) {
+		String[] orderItemsStrings = input.split(",");
 		List<Menu> tempMenu = new ArrayList<>();
 
-		for (String orderItem : orderItems) {
+		for (String orderItem : orderItemsStrings) {
 			String[] item = orderItem.trim().split("-");
 			validateOrderItemFormat(item);
 
@@ -48,8 +48,8 @@ public class User {
 			Menu menuObject = findMenuByName(menuName);
 
 			if (menuObject != null) {
-				validateOverLapItem(menuObject, tempMenu);
-				tempMenu.add(menuObject);
+				validateOverLapItem(menuObject, orderItems);
+				orderItems.add(new OrderItem(menuObject, quantity));
 				
 
 			} else {
@@ -57,17 +57,9 @@ public class User {
 			}
 
 		}
-		return tempMenu;
-
+		
 	}
 
-	private Map<Menu, Integer> convertToMenuMap(List<Menu> tempMenu) {
-		Map<Menu, Integer> menuMap = new HashMap<>();
-		for (Menu menu : tempMenu) {
-			menuMap.put(menu, menuMap.getOrDefault(menu, 0) + 1);
-		}
-		return menuMap;
-	}
 
 	private Menu findMenuByName(String menuName) {
 		for (Menu menu : Menu.values()) {
@@ -90,9 +82,9 @@ public class User {
 		}
 	}
 
-	private void validateOverLapItem(Menu menuObject, List<Menu> menu) {
+	private void validateOverLapItem(Menu menuObject, List<OrderItem> orderItems) {
 
-		if (menu.contains(menuObject)) {
+		if (orderItems.contains(menuObject)) {
 			throw new IllegalArgumentException("[ERROR] 중복된 메뉴를 입력하셨습니다. 다시 입력해 주세요.");
 		}
 	}

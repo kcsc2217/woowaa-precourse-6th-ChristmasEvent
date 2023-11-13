@@ -12,6 +12,8 @@ public class OutputView {
 
 	public static void eventBenefit() {
 		System.out.println(OUTPUT_WOO_EVENT);
+		System.out.println();
+		
 	}
 
 	public static void orderMenu() {

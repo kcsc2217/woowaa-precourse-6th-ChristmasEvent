@@ -13,7 +13,7 @@ public class InputView {
 		
 	}
 
-	public int readDate() {
+	public static int readDate() {
 
 		System.out.println(INPUT_VISIT_DAY);
 		String input = Console.readLine();

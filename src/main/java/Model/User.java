@@ -59,6 +59,16 @@ public class User {
 		}
 		
 	}
+	
+	public int calculateTotalPrice(List<OrderItem> orderItems) {
+		int totalPrice = 0;
+		
+		for(OrderItem orderItem : orderItems) {
+			totalPrice += orderItem.getTotalPrice();
+		}
+		
+		return totalPrice;
+	}
 
 
 	private Menu findMenuByName(String menuName) {

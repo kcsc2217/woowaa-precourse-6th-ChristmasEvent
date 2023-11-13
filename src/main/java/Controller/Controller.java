@@ -14,22 +14,28 @@ import Model.OrderItem;
 public class Controller {
 
 	int day;
+	int expense;
 	User user;
 	List<OrderItem> items;
+	OrderItem oder;
 
 	public Controller() {
 		user = new User();
 		items = new ArrayList<>();
+		
 
 	}
 
 	public void run() {
 		start();
 		MenuInput();
-		OutputView.eventBenefit();
+		OutputView.eventBenefit(day);
 		OutputView.orderMenu();
 
 		PrintItem();
+		OutputView.PrintNoSale();
+		PrintPrice();
+		
 
 	}
 
@@ -38,11 +44,20 @@ public class Controller {
 		day = InputView.readDate();
 
 	}
+	
+	public void PrintPrice() {
+		expense = user.calculateTotalPrice(items);
+		System.out.println(expense + "원");
+	}
+	
+	
+	
 
 	public void PrintItem() {
 		for (OrderItem orderItem : items) {
 			System.out.println(orderItem);
 		}
+		System.out.println();
 	}
 
 	public void MenuInput() {

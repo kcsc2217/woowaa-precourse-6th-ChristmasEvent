@@ -1,6 +1,7 @@
 package Model;
 
 import java.util.List;
+import java.util.Objects;
 
 public class OrderItem {
 
@@ -23,6 +24,20 @@ public class OrderItem {
 	public int getTotalPrice() {
 		return menu.getPrice() * quantity;
 	}
+	
+	@Override
+	
+	public boolean equals (Object ob) {
+		if(this == ob) return true;
+		if(ob == null || getClass() != ob.getClass()) return false;
+		OrderItem orderItem = (OrderItem) ob;
+		return Objects.equals(menu, orderItem.menu);
+	}
+	
+	@Override
+    public int hashCode() {
+        return Objects.hash(menu);
+    }
 	
 
 	@Override

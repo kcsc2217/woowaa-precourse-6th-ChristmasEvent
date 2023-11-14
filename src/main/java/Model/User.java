@@ -19,7 +19,6 @@ public class User {
 			String input = InputView.inputMenuNumber();
 
 			processUserInput(input, orderItems);
-			
 
 		} catch (IllegalArgumentException e) {
 			System.out.println(e.getMessage());
@@ -32,12 +31,10 @@ public class User {
 
 	private void processUserInput(String input, List<OrderItem> orderItems) {
 		String[] orderItemsStrings = input.split(",");
-		
-		
 
 		for (String orderItem : orderItemsStrings) {
-			String[] item = orderItem.trim().split("-");
-			validateOrderItemFormat(item);
+			String[] item = orderItem.trim().split("-"); // 주문시 메뉴와 갯수를 분리
+			validateOrderItemFormat(item); // 제로 콜라 -2 : item[0] : 제로 콜라 item[1] : 2 2개가 나와야함
 
 			String menuName = item[0];
 			int quantity;
@@ -47,43 +44,40 @@ public class User {
 			} catch (NumberFormatException e) {
 				throw new IllegalArgumentException("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
 			}
-			validateItemquantity(quantity);
-			validateOrderLengthLimit(quantity);
+			validateItemquantity(quantity); // 수량이 음수일떄 예외처리
+			validateOrderLengthLimit(quantity); // 수량이 20을 넘어갔을시 예외처리
 
 			Menu menuObject = findMenuByName(menuName);
 
 			if (menuObject != null) {
-				validateOverLapItem(menuObject, orderItems);
+
+				validateOverLapItem(menuObject, orderItems); //
 				orderItems.add(new OrderItem(menuObject, quantity));
-				
-				//음료 카운트
+
+				// 음료 카운트
 				if (menuObject.isDrink()) {
-	                drinkCount += quantity;
-	            }
+					drinkCount += quantity;
+				}
 				totalItemCount += quantity;
-				
-				
 
 			} else {
 				throw new IllegalArgumentException("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
 			}
-			
 
 		}
 		validateDrinkLimit(drinkCount, totalItemCount);
-		
-	}
-	
-	public int calculateTotalPrice(List<OrderItem> orderItems) {
-		int totalPrice = 0;
-		
-		for(OrderItem orderItem : orderItems) {
-			totalPrice += orderItem.getTotalPrice();
-		}
-		
-		return totalPrice;
+
 	}
 
+	public int calculateTotalPrice(List<OrderItem> orderItems) {
+		int totalPrice = 0;
+
+		for (OrderItem orderItem : orderItems) {
+			totalPrice += orderItem.getTotalPrice();
+		}
+
+		return totalPrice;
+	}
 
 	private Menu findMenuByName(String menuName) {
 		for (Menu menu : Menu.values()) {
@@ -99,22 +93,20 @@ public class User {
 			throw new IllegalArgumentException("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
 		}
 	}
-	
+
 	private void validateOrderLengthLimit(int quantity) {
-		sum= 0;
+		sum = 0;
 		sum += quantity;
-		if(sum > 20) {
+		if (sum > 20) {
 			throw new IllegalArgumentException("[ERROR] 20개를 넘어갔습니다. 다시 입력해 주세요.");
 		}
 	}
-	
-	private void validateDrinkLimit(int drinkCount, int totalItemCounts ) {
-		if(drinkCount > 0 && drinkCount == totalItemCount) {
-			 throw new IllegalArgumentException("[ERROR] 음료만 주문 시, 주문할 수 없습니다. 다시 입력해 주세요.");
+
+	private void validateDrinkLimit(int drinkCount, int totalItemCounts) {
+		if (drinkCount > 0 && drinkCount == totalItemCount) {
+			throw new IllegalArgumentException("[ERROR] 음료만 주문 시, 주문할 수 없습니다. 다시 입력해 주세요.");
 		}
 	}
-	
-	
 
 	private void validateItemquantity(int quantity) {
 		if (quantity <= 0) {
@@ -123,8 +115,9 @@ public class User {
 	}
 
 	private void validateOverLapItem(Menu menuObject, List<OrderItem> orderItems) {
-
-		if (orderItems.contains(menuObject)) {
+		OrderItem newItem = new OrderItem(menuObject, 1);
+		
+		if (orderItems.contains(newItem)) {
 			throw new IllegalArgumentException("[ERROR] 중복된 메뉴를 입력하셨습니다. 다시 입력해 주세요.");
 		}
 	}

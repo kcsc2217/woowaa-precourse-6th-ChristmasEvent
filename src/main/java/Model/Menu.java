@@ -34,6 +34,10 @@ public enum Menu {
 		return name;
 	}
 	
+	public boolean isDrink() {
+		return this == ZERO_COLA || this == RED_WINE || this == CHAMPAGNE;
+	}
+	
 	public int getPrice() {
 		return price;
 	}

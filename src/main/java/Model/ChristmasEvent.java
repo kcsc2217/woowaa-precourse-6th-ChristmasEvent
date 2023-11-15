@@ -36,6 +36,19 @@ public class ChristmasEvent {
 		return appliedDiscount;
 
 	}
+	
+	public int presentation(int expense) {
+		Menu menu = Menu.CHAMPAGNE;
+		int price = 0;
+		if(expense > 120000) {
+			price = menu.getPrice();
+		
+		}
+		
+		return price;
+		
+		
+	}
 
 	public int calculateDiscount(OrderItem orderItem) {
 		Menu menu = orderItem.getMenu();
@@ -53,6 +66,15 @@ public class ChristmasEvent {
 		}
 
 		return discount;
+	}
+	
+	public int calculateDiscountStar() {
+		int starDiscount = 0;
+		
+		if(userDay.getDayOfMonth()  == 3 ||  userDay.getDayOfMonth() == 10 || userDay.getDayOfMonth() == 17 || userDay.getDayOfMonth() == 24 || userDay.getDayOfMonth() ==25 || userDay.getDayOfMonth() ==31) {
+			starDiscount += 1000;
+		}
+		return starDiscount;
 	}
 
 	public boolean isWeekend(DayOfWeek dayOfWeek) {

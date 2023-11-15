@@ -48,23 +48,52 @@ public class Controller {
 		OutputView.PrintNoSale();
 		PrintPrice();
 
+		eventCreate();
+		presentationMenu();
 		salePrint();
 
 	}
 
 	public void salePrint() {
 		OutputView.salePrint();
-		eventCreate();
-		if(!event.nonEventDate()) {
-		ddaySale();
-		dateSale();
+
+		if (!event.nonEventDate() && expense > 10000) {
+			ddaySale();
+			dateSale();
+			specialDiscount();
+			printPresentation();
+
+		} else {
+			nonsalePrint();
 		}
-		nonsalePrint();
-		
 
 	}
 	
-	
+	public void eventAmount() {
+		OutputView.printEventAmount();
+		String formattedExpense = String.format("-%,d원", totalSale);
+		System.out.println(formattedExpense);
+		System.out.println();
+	}
+
+	public void presentationMenu() {
+		OutputView.printPresentation();
+		if (!event.nonEventDate() && expense > 120000) {
+			System.out.println("샴페인 1개");
+			System.out.println();
+
+		} else {
+			System.out.println("없음");
+			System.out.println();
+		}
+	}
+
+	public void printPresentation() {
+		int discount = event.presentation(expense);
+		System.out.println("증정 이벤트: -" + discount + "원");
+		totalSale += discount;
+	}
+
 	public void eventCreate() {
 		startDate = LocalDate.of(YEAR_2023, MONTH_DECEMBER, ONE_DAY);
 		endDate = LocalDate.of(YEAR_2023, MONTH_DECEMBER, LAST_DAY);
@@ -72,20 +101,20 @@ public class Controller {
 
 		event = new ChristmasEvent(startDate, endDate, userDate);
 	}
-	
+
 	public void nonsalePrint() {
-		if(event.nonEventDate()) {
-			System.out.println("없음");
-		}
+
+		System.out.println("없음");
+
 	}
 
 	public void ddaySale() {
 		int daySale;
-		
+
 		daySale = event.calculateChristMasDiscount();
 
 		totalSale += daySale;
-		System.out.println("크리스마스 디데이 할인:" + " -" + daySale);
+		System.out.println("크리스마스 디데이 할인:" + " -" + daySale + "원");
 	}
 
 	public void dateSale() {
@@ -93,20 +122,27 @@ public class Controller {
 			int itemDiscount = event.calculateDiscount(orderItem);
 
 			if (itemDiscount > 0) {
-				System.out.println(printWeek() + " -" + itemDiscount);
-			totalSale += itemDiscount;
-				
+				System.out.println(printWeek() + " -" + itemDiscount + "원");
+				totalSale += itemDiscount;
+
 			}
 		}
 	}
-	
+
 	public String printWeek() {
-		if(event.isWeekend(userDate.getDayOfWeek())) {
+		if (event.isWeekend(userDate.getDayOfWeek())) {
 			return "주말 할인:";
-		}
-		else {
+		} else {
 			return "평일 할인:";
 		}
+	}
+
+	public void specialDiscount() {
+		int discount = event.calculateDiscountStar();
+
+		totalSale += discount;
+
+		System.out.println("특별 할인: -" + discount + "원");
 	}
 
 	public void start() {

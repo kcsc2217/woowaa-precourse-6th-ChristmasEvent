@@ -38,6 +38,14 @@ public enum Menu {
 		return this == ZERO_COLA || this == RED_WINE || this == CHAMPAGNE;
 	}
 	
+	public boolean isDessert() {
+		return this == CHOCO_CAKE || this == ICE_CREAM;
+	}
+	
+	
+	public boolean idMaindish() {
+		return this == T_BONE_STEAK || this == BBQ_RIB || this == SEAFOOD_PASTA || this == CHRISTMAS_PASTA;
+	}
 	public int getPrice() {
 		return price;
 	}

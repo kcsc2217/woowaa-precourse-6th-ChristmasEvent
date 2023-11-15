@@ -51,10 +51,12 @@ public class Controller {
 		eventCreate();
 		presentationMenu();
 		salePrint();
+		eventAmount();
 
 	}
 
 	public void salePrint() {
+		
 		OutputView.salePrint();
 
 		if (!event.nonEventDate() && expense > 10000) {
@@ -70,6 +72,7 @@ public class Controller {
 	}
 	
 	public void eventAmount() {
+		System.out.println();
 		OutputView.printEventAmount();
 		String formattedExpense = String.format("-%,d원", totalSale);
 		System.out.println(formattedExpense);
@@ -77,6 +80,7 @@ public class Controller {
 	}
 
 	public void presentationMenu() {
+		
 		OutputView.printPresentation();
 		if (!event.nonEventDate() && expense > 120000) {
 			System.out.println("샴페인 1개");
@@ -90,7 +94,7 @@ public class Controller {
 
 	public void printPresentation() {
 		int discount = event.presentation(expense);
-		System.out.println("증정 이벤트: -" + discount + "원");
+		System.out.println("증정 이벤트: -" + String.format("%,d", discount) + "원");
 		totalSale += discount;
 	}
 
@@ -114,7 +118,7 @@ public class Controller {
 		daySale = event.calculateChristMasDiscount();
 
 		totalSale += daySale;
-		System.out.println("크리스마스 디데이 할인:" + " -" + daySale + "원");
+		System.out.println("크리스마스 디데이 할인:" + " -" + String.format("%,d", daySale) + "원");
 	}
 
 	public void dateSale() {
@@ -122,7 +126,7 @@ public class Controller {
 			int itemDiscount = event.calculateDiscount(orderItem);
 
 			if (itemDiscount > 0) {
-				System.out.println(printWeek() + " -" + itemDiscount + "원");
+				System.out.println(printWeek() + " -" +  String.format("%,d", itemDiscount) + "원");
 				totalSale += itemDiscount;
 
 			}
@@ -142,7 +146,7 @@ public class Controller {
 
 		totalSale += discount;
 
-		System.out.println("특별 할인: -" + discount + "원");
+		System.out.println("특별 할인: -" + String.format("%,d", discount) + "원");
 	}
 
 	public void start() {

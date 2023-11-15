@@ -95,7 +95,6 @@ public class User {
 	}
 
 	private void validateOrderLengthLimit(int quantity) {
-		sum = 0;
 		sum += quantity;
 		if (sum > 20) {
 			throw new IllegalArgumentException("[ERROR] 20개를 넘어갔습니다. 다시 입력해 주세요.");
@@ -116,7 +115,7 @@ public class User {
 
 	private void validateOverLapItem(Menu menuObject, List<OrderItem> orderItems) {
 		OrderItem newItem = new OrderItem(menuObject, 1);
-		
+
 		if (orderItems.contains(newItem)) {
 			throw new IllegalArgumentException("[ERROR] 중복된 메뉴를 입력하셨습니다. 다시 입력해 주세요.");
 		}

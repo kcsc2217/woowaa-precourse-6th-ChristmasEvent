@@ -8,6 +8,9 @@ public class OutputView {
 	private static final String OUTPUT_SALE_CONTENT = "<혜택 내역>";
 	private static final String OUTPUT_PRESENTATION_EVENT = "<증점 메뉴>";
 	private static final String OUTPUT_EVENT_AMOUNT = "<총혜택 금액>";
+	private static final String OUTPUT_SALE_AFTER = "<할인 후 예상 결제 금액>";
+	private static final String OUTPUT_EVENT_BADGE = "<12월 이벤트 배지>";
+	
 
 	public static void openingtMent() {
 		System.out.println(OUTPUT_START_EVENT);
@@ -38,8 +41,16 @@ public class OutputView {
 	}
 	
 	
-	public static void PrintNoSale() {
+	public static void printNoSale() {
 		System.out.println(OUTPUT_SALE_BEFORE);
+	}
+	
+	public static void printSale() {
+		System.out.println(OUTPUT_SALE_AFTER);
+	}
+	
+	public static void printBadge() {
+		System.out.println(OUTPUT_EVENT_BADGE);
 	}
 
 }

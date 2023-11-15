@@ -68,6 +68,27 @@ public class ChristmasEvent {
 		return discount;
 	}
 	
+	public String badgeGrant(int totalSale) {
+		String badge = null;
+		
+		if(totalSale < 5000) {
+			badge = "없음";
+		}
+		
+		if(totalSale >= 5000) {
+			badge = "별";
+		}
+		
+		if(totalSale >= 10000) {
+			badge = "트리";
+		}
+		
+		if(totalSale >= 20000) {
+			badge = "산타";
+		}
+		return badge;
+	}
+	
 	public int calculateDiscountStar() {
 		int starDiscount = 0;
 		

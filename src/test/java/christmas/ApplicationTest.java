@@ -32,6 +32,41 @@ class ApplicationTest extends NsTest {
             assertThat(output()).contains("<혜택 내역>" + LINE_SEPARATOR + "없음");
         });
     }
+    
+    @Test
+    void 유효하지_않은_메뉴_주문_테스트() {
+        assertSimpleTest(() -> {
+            runException("3", "비빔면-1,제로콜라-1");
+            assertThat(output()).contains("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
+        });
+    }
+    
+    @Test
+    void 중복_주문_테스트() {
+        assertSimpleTest(() -> {
+            runException("3", "시저샐러드-1,시저샐러드-1");
+            assertThat(output()).contains("[ERROR] 중복된 메뉴를 입력하셨습니다. 다시 입력해 주세요.");
+        });
+    }
+    
+    @Test
+    void 메뉴_형식_예외_테스트() {
+        assertSimpleTest(() -> {
+            runException("3", "시저샐러드1");
+            assertThat(output()).contains("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
+        });
+    }
+    
+    
+    @Test
+    void 음료만_주문_예외_테스트() {
+        assertSimpleTest(() -> {
+            runException("3", "제로콜라-2,레드와인-1,샴페인-1");
+            assertThat(output()).contains("[ERROR] 음료만 주문 시, 주문할 수 없습니다. 다시 입력해 주세요.");
+        });
+    }
+    
+    
 
     @Test
     void 날짜_예외_테스트() {
@@ -40,6 +75,7 @@ class ApplicationTest extends NsTest {
             assertThat(output()).contains("[ERROR] 유효하지 않은 날짜입니다. 다시 입력해 주세요.");
         });
     }
+   
 
     @Test
     void 주문_예외_테스트() {
@@ -48,6 +84,7 @@ class ApplicationTest extends NsTest {
             assertThat(output()).contains("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
         });
     }
+    
 
     @Override
     protected void runMain() {

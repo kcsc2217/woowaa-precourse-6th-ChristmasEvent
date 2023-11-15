@@ -51,54 +51,60 @@ public class Controller {
 
 		eventCreate();
 		presentationMenu();
-		salePrint();
+		printSale();
 		eventAmount();
-		saleAfter();
+		printFinalSale();
 		printBadge();
 
 	}
 
-	public void salePrint() {
-		
+	public void printSale() {
+
 		OutputView.salePrint();
 
-		if (!event.nonEventDate() && expense > 10000) {
-			ddaySale();
-			dateSale();
-			specialDiscount();
+		if (isEventActive() && isExpenseAboveThreshold()) {
+			applyDdaySale();
+			applyDateSale();
+			applySpecialDiscount();
 			printPresentation();
 
 		} else {
-			nonsalePrint();
+			printNoSaleMessage();
 		}
 
 	}
 	
+	public boolean isEventActive() {
+		return !event.nonEventDate();
+	}
+	
+	public boolean isExpenseAboveThreshold() {
+		return expense > 10000;
+	}
+
 	public void printBadge() {
 		System.out.println();
 		OutputView.printBadge();
 		System.out.println(event.badgeGrant(totalSale));
 	}
-	
-	
-	public void saleAfter() {
-		
+
+	public void printFinalSale() {
+
 		OutputView.printSale();
 		int payment = expense - benefit;
-		
+
 		System.out.println(String.format("%,d원", payment));
-		
-	
+
 	}
-	
+
 	public void eventAmount() {
 		System.out.println();
 		OutputView.printEventAmount();
-		if(totalSale > 0) {
-		String formattedExpense = String.format("-%,d원", totalSale);
-		System.out.println(formattedExpense);
+		if (totalSale > 0) {
+			String formattedExpense = String.format("-%,d원", totalSale);
+			System.out.println(formattedExpense);
 		}
-		if(totalSale == 0) {
+		if (totalSale == 0) {
 			String formattedExpense = String.format("%,d원", totalSale);
 			System.out.println(formattedExpense);
 		}
@@ -106,7 +112,7 @@ public class Controller {
 	}
 
 	public void presentationMenu() {
-		
+
 		OutputView.printPresentation();
 		if (!event.nonEventDate() && expense > 120000) {
 			System.out.println("샴페인 1개");
@@ -119,9 +125,9 @@ public class Controller {
 	}
 
 	public void printPresentation() {
-		int discount = event.presentation(expense);
+		int discount = event.getPresentationPrice(expense);
 		System.out.println("증정 이벤트: -" + String.format("%,d", discount) + "원");
-		totalSale += discount;
+		totalSale = benefit + discount;
 	}
 
 	public void eventCreate() {
@@ -132,29 +138,28 @@ public class Controller {
 		event = new ChristmasEvent(startDate, endDate, userDate);
 	}
 
-	public void nonsalePrint() {
+	public void printNoSaleMessage() {
 
 		System.out.println("없음");
 
 	}
 
-	public void ddaySale() {
+	public void applyDdaySale() {
 		int daySale;
 
 		daySale = event.calculateChristMasDiscount();
 
-		totalSale += daySale;
 		benefit += daySale;
 		System.out.println("크리스마스 디데이 할인:" + " -" + String.format("%,d", daySale) + "원");
 	}
 
-	public void dateSale() {
+	public void applyDateSale() {
 		for (OrderItem orderItem : items) {
 			int itemDiscount = event.calculateDiscount(orderItem);
 
 			if (itemDiscount > 0) {
-				System.out.println(printWeek() + " -" +  String.format("%,d", itemDiscount) + "원");
-				totalSale += itemDiscount;
+				System.out.println(printWeek() + " -" + String.format("%,d", itemDiscount) + "원");
+
 				benefit += itemDiscount;
 
 			}
@@ -162,26 +167,25 @@ public class Controller {
 	}
 
 	public String printWeek() {
-		if (event.isWeekend(userDate.getDayOfWeek())) {
-			return "주말 할인:";
-		} else {
-			return "평일 할인:";
-		}
+		return event.isWeekend(userDate.getDayOfWeek()) ? "주말 할인:" : "평일 할인:";
 	}
 
-	public void specialDiscount() {
+	public void applySpecialDiscount() {
 		int discount = event.calculateDiscountStar();
 
-		totalSale += discount;
 		benefit += discount;
 
 		System.out.println("특별 할인: -" + String.format("%,d", discount) + "원");
 	}
 
 	public void start() {
-		OutputView.openingtMent();
-		day = InputView.readDate();
-		validateDate(day);
+		 OutputView.openingtMent();
+		    try {
+		        day = InputView.readDate();
+		    } catch (IllegalArgumentException e) {
+		        System.out.println(e.getMessage());
+		        start(); // 유효하지 않은 입력이 있을 경우 다시 입력 받도록 재귀적으로 호출
+		    }
 
 	}
 
@@ -203,10 +207,6 @@ public class Controller {
 		items = user.orderMenu();
 	}
 
-	private void validateDate(int day) {
-		if (day < 1 || day > 31) {
-			throw new IllegalArgumentException("[ERROR] 유효하지 않은 날짜입니다. 다시 입력해 주세요.");
-		}
-	}
+	
 
 }
